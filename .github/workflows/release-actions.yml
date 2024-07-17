@@ -37,7 +37,11 @@ jobs:
           ASSIGNEES: monalisa,doctocat,hubot
           LABELS: weekly sync,docs-team
       - run: git tag v${{ github.run_number }}
-      - run: git checkout -b releases/v${{ github.run_number }}
+      - run: |
+              git checkout -b releases/v${{ github.run_number }}
+              echo -e "# Version ${{github.run_number }}\n Commit history:\n$COMMIT_LOG\n" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
+              git add CHANGELOG.md
+              git commit -m "Release v${{ github.run_number }}"
       - run: |
               git config user.name github-actions
               git config user.email github-actions@github.com
