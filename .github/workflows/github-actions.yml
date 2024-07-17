@@ -23,7 +23,6 @@ jobs:
         node-version: [18.x]
     steps:
       - needs: build
-        name: Start tests
         run: npm run test
   linterChecker:
     runs-on: ubuntu-latest
@@ -32,7 +31,6 @@ jobs:
         node-version: [18.x]
     steps:
       - needs: build
-        name: Start linterChecker
         run: npm run lint
 
 
