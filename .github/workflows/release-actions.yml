@@ -25,10 +25,10 @@ jobs:
                 --title "$TITLE" \
                 --label "v${{ github.run_number }}" \
                 --body "$BODY"
-            env:
-              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-              GH_REPO: ${{ github.repository }}
-              TITLE: Release v${{ github.run_number }}
-              ASSIGNEES: monalisa,doctocat,hubot
-              LABELS: weekly sync,docs-team
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TITLE: Release v${{ github.run_number }}
+          ASSIGNEES: monalisa,doctocat,hubot
+          LABELS: weekly sync,docs-team
 
