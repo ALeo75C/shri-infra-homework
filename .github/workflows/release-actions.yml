@@ -17,7 +17,6 @@ jobs:
       - run: git tag v${{ github.run_number }}
       - run: git checkout -b releases/v${{ github.run_number }}
       - run: git push --set-upstream origin releases/v${{ github.run_number }}
-    
       - run: |
               DATE=$(date "+%Y-%m-%d")
               COMMIT_LOG=$(git log $(git describe --tags --abbrev=0)..HEAD)
