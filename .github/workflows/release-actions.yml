@@ -30,14 +30,9 @@ jobs:
               gh issue create \
                 --title "$TITLE" \
                 --body "$(echo -e $BODY)"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_REPO: ${{ github.repository }}
-          TITLE: Release v${{ github.run_number }}
-          ASSIGNEES: monalisa,doctocat,hubot
-          LABELS: weekly sync,docs-team
-      - run: git tag v${{ github.run_number }}
-      - run: |
+              
+              git tag v${{ github.run_number }}
+              
               git config user.name github-actions
               git config user.email github-actions@github.com
               git checkout -b releases/v${{ github.run_number }}
@@ -45,4 +40,10 @@ jobs:
               git add CHANGELOG.md
               git commit -m "Release v${{ github.run_number }}"
               git push --tags --set-upstream origin releases/v${{ github.run_number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TITLE: Release v${{ github.run_number }}
+          ASSIGNEES: monalisa,doctocat,hubot
+          LABELS: weekly sync,docs-team
       
