@@ -23,6 +23,8 @@ jobs:
         node-version: [16.x]
     needs: build
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Start tests
         run: npm run test
   linterChecker:
@@ -32,6 +34,8 @@ jobs:
         node-version: [16.x]
     needs: build
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Start linterChecker
         run: npm run lint
 
