@@ -8,30 +8,32 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: List files in the repository
         run: ls ${{ github.workspace }}
       - name: Install modules
         run: npm install
       - name: Build app
         run: npm run build
-  # tests:
-  #   runs-on: ubuntu-latest
-  #   strategy: 
-  #     matrix:
-  #       node-version: [16.x]
-  #   needs: build
-  #   steps:
-  #     - name: Start tests
-  #       run: npm run test
-  # linterChecker:
-  #   runs-on: ubuntu-latest
-  #   strategy: 
-  #     matrix:
-  #       node-version: [16.x]
-  #   needs: build
-  #   steps:
-  #     - name: Start linterChecker
-  #       run: npm run lint
+  tests:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        node-version: [16.x]
+    needs: build
+    steps:
+      - name: Start tests
+        run: npm run test
+  linterChecker:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        node-version: [16.x]
+    needs: build
+    steps:
+      - name: Start linterChecker
+        run: npm run lint
 
 
 
