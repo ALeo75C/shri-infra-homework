@@ -18,8 +18,7 @@ jobs:
       - run: |
               git config user.name github-actions
               git config user.email github-actions@github.com
-              git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-      - run: git push --set-upstream origin releases/v${{ github.run_number }}
+              git push --set-upstream origin releases/v${{ github.run_number }}
       - run: |
               DATE=$(date "+%Y-%m-%d")
               COMMIT_LOG=$(git log $(git describe --tags --abbrev=0)..HEAD)
