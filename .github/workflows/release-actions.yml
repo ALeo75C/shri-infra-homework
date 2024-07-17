@@ -22,7 +22,14 @@ jobs:
               git push --set-upstream origin releases/v${{ github.run_number }}
       - run: |
               DATE=$(date "+%Y-%m-%d")
-              COMMIT_LOG=$(git log $(git describe --tags --abbrev=0)..HEAD)
+              LATEST_TAG=$(git describe --tags --abbrev=0)
+
+              if [ "$LATEST_TAG" = "" ]; then
+                COMMIT_LOG=$(git log HEAD)
+              else 
+                COMMIT_LOG=$(git log $LATEST_TAG..HEAD)
+              fi
+            
               BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url:"
               gh issue create \
                 --title "$TITLE" \
