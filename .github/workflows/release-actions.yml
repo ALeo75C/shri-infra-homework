@@ -5,6 +5,7 @@ jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
+      - run: actions/checkout@v4
       - name: Install modules
         run: ./pr-actions.yml
   addBranch:
