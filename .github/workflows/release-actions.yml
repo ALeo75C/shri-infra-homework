@@ -26,7 +26,6 @@ jobs:
               BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url:"
               gh issue create \
                 --title "$TITLE" \
-                --label "v${{ github.run_number }}" \
                 --body "$BODY"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
