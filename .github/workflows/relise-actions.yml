@@ -1,0 +1,35 @@
+name: GitHub Actions
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [workflow_dispatch]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install modules
+        run: ./pr-actions.yml
+  addBranch:
+    runs-on: ubuntu-latest
+    needs: tests
+    permissions:
+      issues: write
+    steps:
+      - run: actions/checkout@v4
+      - run: git tag v${{ github.run_number }}
+      - run: git checkout -b releases/v${{ github.run_number }}
+      - run: git push --set-upstream origin releases/v${{ github.run_number }}
+    
+      - run: |
+              DATE=$(date "+%Y-%m-%d")
+              COMMIT_LOG=$(git log $(git describe --tags --abbrev=0)..HEAD)
+              BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url:"
+              gh issue create \
+                --title "$TITLE" \
+                --label "v${{ github.run_number }}" \
+                --body "$BODY"
+            env:
+              GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              GH_REPO: ${{ github.repository }}
+              TITLE: Release v${{ github.run_number }}
+              ASSIGNEES: monalisa,doctocat,hubot
+              LABELS: weekly sync,docs-team
+
