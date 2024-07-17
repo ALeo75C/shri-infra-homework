@@ -1,0 +1,32 @@
+name: GitHub Actions
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [workflow_call]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install modules
+        run: npm install
+      - name: Build app
+        run: npm run build
+      - name: Start tests
+        run: npm run test
+  linterChecker:
+    runs-on: ubuntu-latest
+    strategy: 
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Install modules
+        run: npm install
+      - name: Build app
+        run: npm run build
+      - name: Start linterChecker
+        run: npm run lint
