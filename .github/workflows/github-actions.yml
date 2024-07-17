@@ -14,7 +14,6 @@ jobs:
     steps:
       - name: Install modules
         run: npm install
-    steps:
       - name: Build app
         run: npm run build
   tests:
