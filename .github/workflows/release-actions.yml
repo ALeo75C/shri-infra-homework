@@ -26,10 +26,12 @@ jobs:
 
               if [ "$LATEST_TAG" = "" ]; then
                 COMMIT_LOG=$(git log HEAD)
+                echo "Gathering commit log from head"
               else 
                 COMMIT_LOG=$(git log $LATEST_TAG..HEAD)
+                echo "Gathering commit log from $LATEST_TAG to HEAD"
               fi
-            
+              
               BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url:"
               gh issue create \
                 --title "$TITLE" \
