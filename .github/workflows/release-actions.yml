@@ -14,12 +14,6 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git tag v${{ github.run_number }}
-      - run: git checkout -b releases/v${{ github.run_number }}
-      - run: |
-              git config user.name github-actions
-              git config user.email github-actions@github.com
-              git push --set-upstream origin releases/v${{ github.run_number }}
       - run: |
               DATE=$(date "+%Y-%m-%d")
               LATEST_TAG=$(git describe --tags --abbrev=0)
@@ -42,4 +36,10 @@ jobs:
           TITLE: Release v${{ github.run_number }}
           ASSIGNEES: monalisa,doctocat,hubot
           LABELS: weekly sync,docs-team
-
+      - run: git tag v${{ github.run_number }}
+      - run: git checkout -b releases/v${{ github.run_number }}
+      - run: |
+              git config user.name github-actions
+              git config user.email github-actions@github.com
+              git push --tags --set-upstream origin releases/v${{ github.run_number }}
+      
