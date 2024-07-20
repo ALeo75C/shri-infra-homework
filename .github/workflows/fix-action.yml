@@ -1,5 +1,5 @@
-name: Release
-run-name: ${{ github.actor }} is starting release process 🚀
+name: Fix
+run-name: ${{ github.actor }} starts fixing action ⚒
 on: [workflow_dispatch]
 permissions:
   contents: write
@@ -13,18 +13,24 @@ jobs:
       issues: write
       contents: write
     steps:
+    #   - uses: peter-evans/create-or-update-comment@v4
+    #     with:
+    #       issue-number: 1
+    #       body: |
+    #         date: $(date "+%Y-%m-%d")
+    #         author: ${{ github.actor }}
+
+    #         - With GitHub **Markdown** :sparkles:
+    #         - Created by [create-or-update-comment][1]
+
+    #         [1]: https://github.com/peter-evans/create-or-update-comment
+    #       reactions: '+1'
       - uses: actions/checkout@v4
       - run: |
               DATE=$(date "+%Y-%m-%d")
               LATEST_TAG=$(git describe --tags --abbrev=0 || true)
 
-              if [ "$LATEST_TAG" = "" ]; then
-                COMMIT_LOG=$(git log HEAD)
-                echo "Gathering commit log from head"
-              else 
-                COMMIT_LOG=$(git log $LATEST_TAG..HEAD)
-                echo "Gathering commit log from $LATEST_TAG to HEAD"
-              fi
+              COMMIT_LOG=$(git log $LATEST_TAG..HEAD) //add fix_|number|
               
               BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url:"
               gh issue create \

@@ -6,7 +6,9 @@
     "build": "webpack --mode=production --node-env=production",
     "watch": "webpack --watch",
     "test": "jest",
-    "lint": "eslint ./src"
+    "lint": "eslint ./src",
+    "build:docker": "docker build -t infra-hw .",
+    "start:docker": "docker run -d --name super_duper_docker_name -p 3000:3000 -t infra-hw"
   },
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
