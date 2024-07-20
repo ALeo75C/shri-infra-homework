@@ -4,4 +4,4 @@ COPY . /app
 RUN cd /app
 RUN npm install
 RUN npm run build
-CMD cd /app run start
+CMD cd /app && run start
