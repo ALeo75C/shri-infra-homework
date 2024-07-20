@@ -8,7 +8,7 @@
     "test": "jest",
     "lint": "eslint ./src",
     "build:docker": "docker build -t infra-hw . ",
-    "start:docker": "docker stop super_duper_docker_name && docker rm super_duper_docker_name && docker run -d --name super_duper_docker_name -p 3000:3000 -t infra-hw"
+    "start:docker": "dockerStart"
   },
   "dependencies": {
     "@bem-react/classname": "^1.6.0",
