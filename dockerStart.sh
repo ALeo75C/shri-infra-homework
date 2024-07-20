@@ -1,6 +1,6 @@
 #! /bin/bash
 
-container=$(docker ps | gpep 'super_duper_docker_name')
+container=$(docker ps | grep 'super_duper_docker_name')
 
 if [ container != "" ]; then 
     docker stop super_duper_docker_name && docker rm super_duper_docker_name
