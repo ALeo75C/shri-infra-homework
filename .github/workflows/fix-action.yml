@@ -19,7 +19,8 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git checkout releases/${{ inputs.version }}
+        with:
+          ref: releases/${{ inputs.version }}
       - run: npm run build:docker
       - run: |
             cat << 'EOT' > key.json
