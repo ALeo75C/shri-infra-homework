@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is starting release process 🚀
 on: 
     workflow_dispatch:
         inputs:
-            realice: 
+            deploy_version: 
                 description: 'Номер версии'
                 required: true
 permissions:
@@ -18,7 +18,7 @@ jobs:
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-      - run: docker manifest inspect ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.realice }}
+      - run: docker manifest inspect ${{ secrets.YC_REGISTRY_ID }}/app:${{ inputs.deploy_version }}
       - run: |
             cat << 'EOT' > ssh_keys
             ${{ secrets.SSH_PRIVATE_KEY }}
@@ -28,4 +28,4 @@ jobs:
             ${{ secrets.SSH_PUBLIC_KEY }}
             EOT
       - run: ssh -i ssh_keys -o "IdentitiesOnly=true" -lzaizpr 158.160.140.187 ls
-    #   - run: docker pull ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.realice }}
+    #   - run: docker pull ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.deploy_version }}
