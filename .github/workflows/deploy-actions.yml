@@ -51,7 +51,7 @@ jobs:
           DATE=$(date "+%Y-%m-%d")
           BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}""
           issueNumber=$(gh issue list -S "in:title Release ${{ inputs.deploy_version }}" | grep 'Release ${{ inputs.deploy_version }}' | awk '{print $1}')
-          gh issue comment "$issueNumber" --body "$BODY"
+          gh issue comment "$issueNumber" --body "$(echo -e $BODY)"
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GH_REPO: ${{ github.repository }}
