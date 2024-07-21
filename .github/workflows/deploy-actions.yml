@@ -25,9 +25,11 @@ jobs:
             cat << 'EOT' > ssh_keys
             ${{ secrets.SSH_PRIVATE_KEY }}
             EOT
+            chmod 600 ssh_keys
       - run: |
             cat << 'EOT' > ssh_keys.pub
             ${{ secrets.SSH_PUBLIC_KEY }}
             EOT
+            chmod 600 ssh_keys.pub
       - run: ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 ls
     #   - run: docker pull ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.deploy_version }}
