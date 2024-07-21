@@ -1,0 +1,14 @@
+name: create Docker
+run-name: ${{ github.actor }} is starting release process 🚀
+on: [workflow_dispatch]
+jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/login-action@v3
+        with: 
+            registry: cr.yandex
+            username: json_key
+            password: ${{ secrets.YC_REGISTRY}}
+    #   - run: 
