@@ -18,7 +18,7 @@ jobs:
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-            str=${{ secrets.YC_REGISTRY_ID }}/app:${{ inputs.deploy_version }}
+            str=cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}
             echo $str
             docker manifest inspect $str
       - run: |
@@ -29,5 +29,5 @@ jobs:
             cat << 'EOT' > ssh_keys.pub
             ${{ secrets.SSH_PUBLIC_KEY }}
             EOT
-      - run: ssh -i ssh_keys -o "IdentitiesOnly=true" -lzaizpr 158.160.140.187 ls
+      - run: ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 ls
     #   - run: docker pull ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.deploy_version }}
