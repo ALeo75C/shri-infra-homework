@@ -49,7 +49,7 @@ jobs:
       - name: Add comment
         run: |
           DATE=$(date "+%Y-%m-%d")
-          BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}""
+          BODY="Deploy is performed.\nDeploy date: $DATE\nWho triggered: ${{ github.actor }}\n"
           issueNumber=$(gh issue list -S "in:title Release ${{ inputs.deploy_version }}" | grep 'Release ${{ inputs.deploy_version }}' | awk '{print $1}')
           gh issue comment "$issueNumber" --body "$(echo -e $BODY)"
         env:

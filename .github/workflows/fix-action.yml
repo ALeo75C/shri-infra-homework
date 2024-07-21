@@ -68,7 +68,7 @@ jobs:
             echo "Gathering commit log from $LATEST_TAG to HEAD"
           fi
 
-          BODY="Fix date: $DATE\nAuthor: ${{ github.actor }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.version }}_fix${{ github.run_number }}"
+          BODY="Release fix created. Fix date: $DATE\nAuthor: ${{ github.actor }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.version }}_fix${{ github.run_number }}"
           issueNumber=$(gh issue list -S "in:title Release ${{ inputs.version }}" | grep 'Release ${{ inputs.version }}' | awk '{print $1}')
           gh issue comment "$issueNumber" --body "$(echo -e $BODY)"
         env:
