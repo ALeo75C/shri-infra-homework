@@ -18,7 +18,9 @@ jobs:
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-            docker manifest inspect cr.yandex/crpqfmcpde6ccgipohk3/app:v27
+            str=${{ secrets.YC_REGISTRY_ID }}/app:${{ inputs.deploy_version }}
+            echo $str
+            docker manifest inspect $str
       - run: |
             cat << 'EOT' > ssh_keys
             ${{ secrets.SSH_PRIVATE_KEY }}
