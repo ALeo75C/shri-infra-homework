@@ -31,8 +31,12 @@ jobs:
             chmod 600 ssh_keys.pub
       - run: | 
           ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 << EOF
-            docker stop $(docker ps -a -q)
-            docker rm $(docker ps -a -q)
+           container=$(docker ps | grep 'super_duper_docker_name')
+
+            if [ container != "" ]; then 
+                docker stop super_duper_docker_name && docker rm super_duper_docker_name
+            fi
+
             docker pull cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
             docker run -d --name super_duper_docker_name -p 3000:3000 -t cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
           EOF
