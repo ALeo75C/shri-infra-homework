@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
         inputs:
             version: 
-                description: 'Номер версии'
+                description: 'Номер версии. Например: v123'
                 required: true
 permissions:
   contents: write
@@ -19,16 +19,17 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-      - run: git checkout relieses/${{ inputs.version }}
+      - run: git checkout releases/${{ inputs.version }}
       - run: npm run build:docker
       - run: |
             cat << 'EOT' > key.json
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-            dockerUrl="${{ secrets.YC_REGISTRY_ID }}3/app:v${{ github.run_number }}"
-            docker tag infra-hw $dockerUrl
-            docker push $dockerUrl
+            dockerUrl="${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.version }}"
+            dockerUrlFix="${dockerUrl}_fix${{ github.run_number }}"
+            docker tag infra-hw $dockerUrlFix
+            docker push $dockerUrlFix
             docker tag infra-hw "${dockerUrl}_latest"
             docker push "${dockerUrl}_latest"
   addTag: 
@@ -36,17 +37,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: git checkout relieses/${{ inputs.version }}
+      - run: git checkout releases/${{ inputs.version }}
       - run: |
-          LATEST_TAG=$(git describe --tags --abbrev=0 || true)          
-          
           git config user.name github-actions
           git config user.email github-actions@github.com
 
-          git commit -m "Fix for v${{ inputs.version }}"
           git tag v${{ inputs.version }}_fix#${{ github.run_number }}
-          git push --tags --set-upstream origin main
-          git checkout -b releases/v${{ inputs.version }}
           git push --tags --set-upstream origin releases/v${{ inputs.version }}
   add-comment:
     needs: addTag
@@ -57,7 +53,17 @@ jobs:
       - name: Add comment
         run: |
           DATE=$(date "+%Y-%m-%d")
-          BODY="Fix date: $DATE\nAuthor: ${{ github.actor }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.version }}""
+          LATEST_TAG=$(git describe --tags --abbrev=0 || true)
+
+          if [ "$LATEST_TAG" = "" ]; then
+            COMMIT_LOG=$(git log HEAD --all)
+            echo "Gathering commit log from head"
+          else 
+            COMMIT_LOG=$(git log $LATEST_TAG..HEAD --all)
+            echo "Gathering commit log from $LATEST_TAG to HEAD"
+          fi
+
+          BODY="Fix date: $DATE\nAuthor: ${{ github.actor }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.version }}_fix${{ github.run_number }}"
           issueNumber=$(gh issue list -S "in:title Release ${{ inputs.version }}" | grep 'Release ${{ inputs.version }}' | awk '{print $1}')
           gh issue comment "$issueNumber" --body "$(echo -e $BODY)"
         env:

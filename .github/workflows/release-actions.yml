@@ -20,7 +20,7 @@ jobs:
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-            dockerUrl="${{ secrets.YC_REGISTRY_ID }}3/app:v${{ github.run_number }}"
+            dockerUrl="${{ secrets.YC_REGISTRY_ID }}/app:v${{ github.run_number }}"
             docker tag infra-hw $dockerUrl
             docker push $dockerUrl
             docker tag infra-hw "${dockerUrl}_latest"
@@ -37,7 +37,7 @@ jobs:
                 echo "Gathering commit log from $LATEST_TAG to HEAD"
               fi
               
-              BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "${{ secrets.YC_REGISTRY_ID }}3/app:v${{ github.run_number }}""
+              BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "${{ secrets.YC_REGISTRY_ID }}/app:v${{ github.run_number }}""
               gh issue create \
                 --title "$TITLE" \
                 --body "$(echo -e $BODY)"
