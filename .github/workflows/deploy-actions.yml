@@ -40,4 +40,18 @@ jobs:
             docker pull cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
             docker run -d --name super_duper_docker_name -p 3000:3000 -t cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
           EOF
-
+  add-comment:
+    needs: deploy
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - name: Add comment
+        run: |
+          DATE=$(date "+%Y-%m-%d")
+          BODY="Release date: $DATE\nAuthor: ${{ github.actor }}\nVersion: ${{ github.run_number }}\nCommit log:\n$COMMIT_LOG\nDocker registry url: "cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}""
+          issueNumber=$(gh issue list -S "in:title Release ${{ inputs.deploy_version }}" | grep 'Release ${{ inputs.deploy_version }}' | awk '{print $1}')
+          gh issue comment "$issueNumber" --body "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
