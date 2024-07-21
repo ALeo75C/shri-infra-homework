@@ -18,9 +18,7 @@ jobs:
             ${{ secrets.YC_REGISTRY }}
             EOT
             cat key.json | docker login --username json_key --password-stdin cr.yandex
-            str=cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}
-            echo $str
-            docker manifest inspect $str
+            docker manifest inspect cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
       - run: |
             cat << 'EOT' > ssh_keys
             ${{ secrets.SSH_PRIVATE_KEY }}
@@ -31,5 +29,11 @@ jobs:
             ${{ secrets.SSH_PUBLIC_KEY }}
             EOT
             chmod 600 ssh_keys.pub
-      - run: ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 ls
-    #   - run: docker pull ${{ secrets.YC_REGISTRY_ID }}/app:v${{ inputs.deploy_version }}
+      - run: | 
+          ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 << EOF
+            docker stop $(docker ps -a -q)
+            docker rm $(docker ps -a -q)
+            docker pull cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
+            docker run -d --name super_duper_docker_name -p 3000:3000 -t cr.yandex/crpqfmcpde6ccgipohk3/app:${{ inputs.deploy_version }}_latest
+          EOF
+
