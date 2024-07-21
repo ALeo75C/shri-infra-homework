@@ -42,14 +42,14 @@ jobs:
                 --title "$TITLE" \
                 --body "$(echo -e $BODY)"
               
-              git tag v${{ github.run_number }}
-              
               git config user.name github-actions
               git config user.email github-actions@github.com
               echo -e "# Version ${{github.run_number }}\n Commit history:\n$COMMIT_LOG\n" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
               git add CHANGELOG.md
-              git checkout -b releases/v${{ github.run_number }}
               git commit -m "Release v${{ github.run_number }}"
+              git tag v${{ github.run_number }}
+              git push --tags --set-upstream origin main
+              git checkout -b releases/v${{ github.run_number }}
               git push --tags --set-upstream origin releases/v${{ github.run_number }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
