@@ -19,7 +19,7 @@ jobs:
             cat << 'EOT' > key.json
             ${{ secrets.YC_REGISTRY }}
             EOT
-            cat key.json | docker login --username json_key --password-stdin
+            cat key.json | docker login --username json_key --password-stdin cr.yandex
             dockerUrl="cr.yandex/crpqfmcpde6ccgipohk3/app:v${{ github.run_number }}"
             docker tag infra-hw $dockerUrl
             docker push $dockerUrl
