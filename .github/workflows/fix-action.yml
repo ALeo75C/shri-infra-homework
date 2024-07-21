@@ -19,8 +19,7 @@ jobs:
       contents: write
     steps:
       - uses: actions/checkout@v4
-        with: 
-          ref: "relieses/${{ inputs.version }}"
+      - run: git checkout relieses/${{ inputs.version }}
       - run: npm run build:docker
       - run: |
             cat << 'EOT' > key.json
