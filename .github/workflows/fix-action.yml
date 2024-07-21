@@ -36,8 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: 
-          ref: "relieses/${{ inputs.version }}"
+      - run: git checkout relieses/${{ inputs.version }}
       - run: |
           LATEST_TAG=$(git describe --tags --abbrev=0 || true)          
           
