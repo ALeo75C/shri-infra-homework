@@ -31,7 +31,7 @@ jobs:
             chmod 600 ssh_keys.pub
       - run: | 
           ssh -i ssh_keys -o "IdentitiesOnly=true" -o StrictHostKeyChecking=no -lzaizpr 158.160.140.187 << EOF
-           container=$(docker ps | grep 'super_duper_docker_name')
+           container=$(docker ps -a | grep 'super_duper_docker_name')
 
             if [ container != "" ]; then 
                 docker stop super_duper_docker_name && docker rm super_duper_docker_name
