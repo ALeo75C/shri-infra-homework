@@ -33,6 +33,7 @@ jobs:
             docker tag infra-hw "${dockerUrl}_latest"
             docker push "${dockerUrl}_latest"
   addTag: 
+    needs: buildDocker
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
